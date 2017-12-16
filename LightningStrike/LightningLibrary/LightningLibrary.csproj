@@ -54,12 +54,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Payments\Channel.cs" />
+    <Compile Include="RPC\LightingClient.cs" />
+    <Compile Include="RPC\LightningCall.cs" />
+    <Compile Include="Payments\Network.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="RPC\" />
+    <Folder Include="Abstractions\" />
+    <Folder Include="Payments\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Abstractions\placeholder.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

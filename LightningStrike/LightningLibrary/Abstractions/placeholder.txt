@@ -1,0 +1,2 @@
+﻿https://lightning.network/lightning-network-paper.pdf
+placerholder.txt

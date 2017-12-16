@@ -1,4 +1,7 @@
 #LightingVoid
+<h3>Important Takeaways</h3>
+
+
 <h3>Lightning Resources</h3>
 <dl>
 <dt><a href="http://api.lightning.community/">Lightning API Documentation</a></dt>
