@@ -28,9 +28,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="System.Security.Cryptography.Encoding">
       <HintPath>..\packages\System.Security.Cryptography.Encoding.4.3.0\lib\net46\System.Security.Cryptography.Encoding.dll</HintPath>
     </Reference>
@@ -51,6 +48,9 @@
     <Reference Include="NBitcoin">
       <HintPath>..\packages\NBitcoin.4.0.0.50\lib\net461\NBitcoin.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -58,11 +58,16 @@
     <Compile Include="RPC\LightingClient.cs" />
     <Compile Include="RPC\LightningCall.cs" />
     <Compile Include="Payments\Network.cs" />
+    <Compile Include="RPC\RpcRequest.cs" />
+    <Compile Include="RPC\RpcResponse.cs" />
+    <Compile Include="RPC\RPCClient.cs" />
+    <Compile Include="LightningGateways\LightningGatewayClient.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="RPC\" />
     <Folder Include="Abstractions\" />
     <Folder Include="Payments\" />
+    <Folder Include="LightningGateways\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
