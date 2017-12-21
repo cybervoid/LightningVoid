@@ -84,16 +84,14 @@ namespace LightningLibrary.Tests
             Transaction unsigned = builder.AddCoins(coin).Send(addressNico, Money.Coins(1.0m)).BuildTransaction(sign: false);
             Console.WriteLine(unsigned);
             Console.WriteLine("Alice signs transaction:");
-            Transaction aliceSigned = builder.AddCoins(coin).AddKeys(walletAlice.GetPrivateKey()).SignTransaction(unsigned);
-            Console.WriteLine(aliceSigned);
+            Transaction aliceSigned = builder.AddCoins(coin).AddKeys(walletAlice.GetPrivateKey()).SignTransaction(unsigned);            
             Console.WriteLine("Bob signs transaction:");
             //At this line, SignTransaction(unSigned) has the identical functionality with the SignTransaction(aliceSigned).
             //It's because unsigned transaction has already been signed by Alice privateKey from above.
-            Transaction bobSigned = builder.AddCoins(coin).AddKeys(walletBob.GetPrivateKey()).SignTransaction(aliceSigned);
-            Console.WriteLine(bobSigned);
+            Transaction bobSigned = builder.AddCoins(coin).AddKeys(walletBob.GetPrivateKey()).SignTransaction(aliceSigned);            
             Console.WriteLine("Combine Signatures");
             Transaction fullySigned = builder.AddCoins(coin).CombineSignatures(aliceSigned, bobSigned);
-            Console.WriteLine(fullySigned);
+            
             
         }
 

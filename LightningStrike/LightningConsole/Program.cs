@@ -10,6 +10,10 @@ namespace LightningConsole
 
         public static void Main(string[] args)
         {
+
+            LightningTests lightningTests = new LightningTests();
+            lightningTests.RPCTest();
+
             Dictionary<int, string> seeds = new Dictionary<int, string>();
             seeds.Add(0, "ryanseed_0");
             seeds.Add(1, "ryanseed_1");
