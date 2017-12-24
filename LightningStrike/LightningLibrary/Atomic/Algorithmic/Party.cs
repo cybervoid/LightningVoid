@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using NBitcoin.BouncyCastle.Math;
-namespace LightningLibrary.Atomic
+namespace LightningLibrary.Atomic.Algorithmic
 {
     public class Party
     {

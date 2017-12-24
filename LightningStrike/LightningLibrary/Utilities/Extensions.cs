@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LightningLibrary.Helpers
+namespace LightningLibrary.Utilities
 {
     public static class Extensions
     {
@@ -17,10 +17,11 @@ namespace LightningLibrary.Helpers
             return (attributes.Any()) ? attributes.First().Description : value.ToString();
         }
 
-        public static string ToJsonMethodName(this RpcMethod value)
-        {
-            return GetEnumDescription(value);
-        }
+        //public static string ToJsonMethodName(this RpcMethod value)
+        //{
+        //    return GetEnumDescription(value);
+        //}
+
 
         //public static string ToJsonMethodName(this BlockTag value)
         //{

@@ -1,5 +1,5 @@
 ﻿using System;
-namespace LightningLibrary.Atomic
+namespace LightningLibrary.Atomic.Algorithmic
 {
     public class Interaction
     {

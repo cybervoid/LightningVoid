@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using LightningLibrary.Utilities;
 namespace LightningLibrary.Tests
 {
     public class WitnessTests
@@ -67,10 +67,11 @@ namespace LightningLibrary.Tests
             var keyAlice = walletAlice.GetPublicKey(path);
             var keySatoshi = walletAlice.GetPublicKey(path);
 
+
             Console.WriteLine("Generate a script to receive coins, it will require 2 of 3 signatures to spend.");
             var scriptPubKey = PayToMultiSigTemplate.Instance.GenerateScriptPubKey(2, new[] { keyBob.PubKey, keyAlice.PubKey, keySatoshi.PubKey });
             Console.WriteLine(scriptPubKey);
-
+            Console.WriteLine();
             Console.WriteLine("Received coins in a transaction");
             var received = new Transaction();
             received.Outputs.Add(new TxOut(Money.Coins(1.0m), scriptPubKey));
@@ -82,17 +83,27 @@ namespace LightningLibrary.Tests
             TransactionBuilder builder = new TransactionBuilder();
             //build an unsigned transaction
             Transaction unsigned = builder.AddCoins(coin).Send(addressNico, Money.Coins(1.0m)).BuildTransaction(sign: false);
+            Helpers.ChangeColor();
             Console.WriteLine(unsigned);
+            Helpers.ResetColor();
             Console.WriteLine("Alice signs transaction:");
             Transaction aliceSigned = builder.AddCoins(coin).AddKeys(walletAlice.GetPrivateKey()).SignTransaction(unsigned);            
+            Helpers.ChangeColor();
+            Console.WriteLine(aliceSigned);
+            Helpers.ResetColor();
             Console.WriteLine("Bob signs transaction:");
             //At this line, SignTransaction(unSigned) has the identical functionality with the SignTransaction(aliceSigned).
             //It's because unsigned transaction has already been signed by Alice privateKey from above.
             Transaction bobSigned = builder.AddCoins(coin).AddKeys(walletBob.GetPrivateKey()).SignTransaction(aliceSigned);            
+            Helpers.ChangeColor();
+            Console.WriteLine(bobSigned);
+            Helpers.ResetColor();
+
             Console.WriteLine("Combine Signatures");
             Transaction fullySigned = builder.AddCoins(coin).CombineSignatures(aliceSigned, bobSigned);
-            
-            
+            Helpers.ChangeColor();
+            Console.WriteLine(fullySigned.ToString());
+            Helpers.ResetColor();
         }
 
         public void P2WSHScript()

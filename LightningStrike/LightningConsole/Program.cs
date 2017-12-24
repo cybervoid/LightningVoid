@@ -26,6 +26,8 @@ namespace LightningConsole
             Console.WriteLine("Multi Sig");
             witnessTests.MultiSig(seeds[0], seeds[1], seeds[2], seeds[3]);
 
+            return;
+
             Console.WriteLine("Get the P2WPKH signature");
             witnessTests.P2WPKH();
 
