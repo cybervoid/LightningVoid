@@ -221,8 +221,67 @@ namespace LightningLibrary.Tests
 
         public void P2WSH(string seed0, string seed1, string seed2, string seed3)
         {
+            https://programmingblockchain.gitbooks.io/programmingblockchain/content/other_types_of_ownership/p2wsh_pay_to_witness_script_hash.html
             var key = new Key();
             Console.WriteLine(key.PubKey.ScriptPubKey.WitHash.ScriptPubKey);
+            Console.WriteLine();
+
+            HDWallet walletAlice = new HDWallet(seed1); //signer 1
+            HDWallet walletBob = new HDWallet(seed0); //signer 2
+            HDWallet walletSatoshi = new HDWallet(seed2); //does not sign
+            HDWallet walletNico = new HDWallet(seed3);
+            uint path = 0;
+
+            Key bob = walletBob.GetPrivateKey(path).PrivateKey;
+            Key alice = walletAlice.GetPrivateKey(path).PrivateKey;
+            Key satoshi = walletSatoshi.GetPrivateKey(path).PrivateKey;
+
+            Script scriptPubKey = PayToMultiSigTemplate.Instance
+                            .GenerateScriptPubKey(2, new[] { bob.PubKey, alice.PubKey, satoshi.PubKey });
+
+            Console.WriteLine("Script " + scriptPubKey);
+            Console.WriteLine("With P2SH Payment: " + scriptPubKey.PaymentScript);
+            Console.WriteLine(scriptPubKey.PaymentScript.Hash.GetAddress(Network.Main));
+            Console.WriteLine();
+            //Set up a new transaction to use this address
+            //var redeemAddress = scriptPubKey.PaymentScript.Hash.GetAddress(Network.Main);
+            Script redeemScript = PayToMultiSigTemplate.Instance
+                                    .GenerateScriptPubKey(2, new[] { bob.PubKey, alice.PubKey, satoshi.PubKey });
+            Console.WriteLine(redeemScript.Hash); //redeemScript.Hash is NOT the bitcoin address
+            Transaction received = new Transaction();
+            //Pay to the script hash
+            received.Outputs.Add(new TxOut(Money.Coins(1.0m), redeemScript.WitHash.ScriptPubKey));
+            //Warning: Warning: The payment is sent to redeemScript.Hash and not to redeemScript!
+
+            //to spend what they have, any owner will need to create script coin.
+            ScriptCoin coin = received.Outputs.AsCoins().First().ToScriptCoin(redeemScript);
+            TransactionBuilder builder = new TransactionBuilder();
+            Transaction unsigned = builder.AddCoins(coin).Send(walletNico.GetBitcoinAddress(path), Money.Coins(1.0m)).BuildTransaction(sign: false);
+            Helpers.ChangeColor();
+            Console.WriteLine(unsigned);
+            Helpers.ResetColor();
+            Console.WriteLine("Alice signs transaction:");
+            //Key alice = walletAlice.GetPrivateKey().PrivateKey;
+            Transaction aliceSigned = builder.AddCoins(coin).AddKeys(alice).SignTransaction(unsigned);
+
+            Helpers.ChangeColor();
+            Console.WriteLine(aliceSigned);
+            Console.WriteLine("Script sig, one 0 should be replaced with a hash sig");
+            Helpers.ResetColor();
+            Console.WriteLine("Bob signs transaction:");
+            //At this line, SignTransaction(unSigned) has the identical functionality with the SignTransaction(aliceSigned).
+            //It's because unsigned transaction has already been signed by Alice privateKey from above.
+            Transaction bobSigned = builder.AddCoins(coin).AddKeys(bob).SignTransaction(aliceSigned);
+            Helpers.ChangeColor();
+            Console.WriteLine(bobSigned);
+            Helpers.ResetColor();
+
+            Console.WriteLine("Combine Signatures");
+            Transaction fullySigned = builder.AddCoins(coin).CombineSignatures(aliceSigned, bobSigned);
+            Helpers.ChangeColor();
+            Console.WriteLine(fullySigned.ToString());
+            Helpers.ResetColor();
+
             Console.WriteLine();
         }
 
@@ -257,11 +316,38 @@ namespace LightningLibrary.Tests
         /// <summary>
         /// To harness the advantages of segwit, while being compatible with old software, P2W over P2SH is allowed. For old node, it will look like a normal P2SH payment.
         /// </summary>
-        public void P2WOverP2SH()
+        public void P2W_Over_P2SH(string seed0, string seed1, string seed2, string seed3)
         {
-            Console.WriteLine("Let’s take the example of P2WPKH over P2SH, also called with the sweet name of P2SH(P2WPKH).");
+            //http://n.bitcoin.ninja/checkscript   <----- really useful
+
+            //You can transform any P2W* to a P2W*over P2SH by:
+            //-Replacing the ScriptPubKey by its P2SH equivalent.
+            //-The former ScriptPubKey will be placed as the only push in the scriptSig in the spending transaction,
+            //-All other data will be pushed in the witness of the spending transaction.
+            //-Don’t worry, if this sound complicated, the TransactionBuilder will allow you to abstract the plumbing effectively.
+            //https://programmingblockchain.gitbooks.io/programmingblockchain/content/other_types_of_ownership/p2wsh_pay_to_witness_script_hash.html
             var key = new Key();
-            Console.WriteLine(key.PubKey.WitHash.ScriptPubKey.Hash.ScriptPubKey);
+            Console.WriteLine(key.PubKey.ScriptPubKey.WitHash.ScriptPubKey);
+            Console.WriteLine();
+
+            HDWallet walletAlice = new HDWallet(seed1); //signer 1
+            HDWallet walletBob = new HDWallet(seed0); //signer 2
+            HDWallet walletSatoshi = new HDWallet(seed2); //does not sign
+            HDWallet walletNico = new HDWallet(seed3);
+            uint path = 0;
+
+            Key bob = walletBob.GetPrivateKey(path).PrivateKey;
+            Key alice = walletAlice.GetPrivateKey(path).PrivateKey;
+            Key satoshi = walletSatoshi.GetPrivateKey(path).PrivateKey;
+
+            Script scriptPubKey = PayToMultiSigTemplate.Instance
+                            .GenerateScriptPubKey(2, new[] { bob.PubKey, alice.PubKey, satoshi.PubKey });
+
+            Console.WriteLine("Script " + scriptPubKey);
+            Console.WriteLine("With P2SH Payment: " + scriptPubKey.PaymentScript);
+            Console.WriteLine(scriptPubKey.PaymentScript.Hash.GetAddress(Network.Main));
+
+
         }
     }
 }
