@@ -35,27 +35,19 @@ namespace LightningLibrary.Wallets
         
         public ExtKey GetPrivateKey()
         {                
+            throw new NotImplementedException("Not implemented, use GetPrivateKey(path)");
             return _MasterPrivateKey;            
         }
 
         public ExtKey GetPrivateKey(uint path)
         {
-            //possibility 1
-            string wifMaybe = _MasterPrivateKey.Derive(path).ToString(_Network);
-            return ExtKey.Parse(wifMaybe);
-
-            //possible 2
-            //string wifStr = _MasterPublicKey.Derive(path).ToString(_Network);
-            //return ExtKey.Parse(wifStr);
-           
-
-            //possibility 3
-            //return _MasterPrivateKey.Derive(path);
+            return _MasterPrivateKey.Derive(path);
         }
 
 
         public ExtPubKey GetPublicKey()
         {
+            throw new NotImplementedException("Not implemented, use GetPublicKey(path)");
             return _MasterPublicKey;
         }
         /// <summary>
@@ -64,9 +56,10 @@ namespace LightningLibrary.Wallets
         /// <param name="path">The BIP32 derived path</param>
         /// <returns></returns>
         public ExtPubKey GetPublicKey(uint path)
-        {            
-            string wifStr = _MasterPublicKey.Derive(path).ToString(_Network);
-            return ExtPubKey.Parse(wifStr);
+        {
+            //string wifStr = _MasterPublicKey.Derive(path).ToString(_Network);
+            //return ExtPubKey.Parse(wifStr);
+            return _MasterPublicKey.Derive(path);
         }
 
         /// <summary>
@@ -80,16 +73,12 @@ namespace LightningLibrary.Wallets
             return address;
         }
 
-        /// <summary>
-        /// The public key's address from a derived path.
-        /// </summary>
-        /// <param name="path">The derivation path</param>
-        /// <returns>The public address</returns>
         public BitcoinAddress GetBitcoinAddress(uint path)
         {
             var hash = GetPublicKey(path).PubKey.Hash;
             var address = hash.GetAddress(_Network);
             return address;
         }
+
     }
 }

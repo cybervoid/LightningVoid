@@ -23,6 +23,9 @@ namespace LightningConsole
 
 
             WitnessTests witnessTests = new WitnessTests(seeds[0]);
+            witnessTests.P2WSH(seeds[0], seeds[1], seeds[2], seeds[3]);
+
+
             witnessTests.P2SH(seeds[0], seeds[1], seeds[2], seeds[3]);
 
             witnessTests.MultiSigFromBook();
