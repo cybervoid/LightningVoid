@@ -56,45 +56,93 @@ namespace LightningLibrary.Tests
             //Console.WriteLine(address.ToString());
         }
 
+        public void MultiSigFromBook()
+        {
+            Key bob = new Key();
+            Key alice = new Key();
+            Key satoshi = new Key();
+
+            var scriptPubKey = PayToMultiSigTemplate.Instance.GenerateScriptPubKey(2, new[] { bob.PubKey, alice.PubKey, satoshi.PubKey });
+
+            Console.WriteLine(scriptPubKey);
+            var received = new Transaction();
+            received.Outputs.Add(new TxOut(Money.Coins(1.0m), scriptPubKey));
+            Coin coin = received.Outputs.AsCoins().First();
+            BitcoinAddress nico = new Key().PubKey.GetAddress(Network.Main);
+            TransactionBuilder builder = new TransactionBuilder();
+            Transaction unsigned = builder
+                                  .AddCoins(coin)
+                                  .Send(nico, Money.Coins(1.0m))
+                                  .BuildTransaction(sign: false);
+            Helpers.ChangeColor();
+            Console.WriteLine(unsigned);
+            Helpers.ResetColor();
+            Transaction aliceSigned = builder
+                                    .AddCoins(coin)
+                                    .AddKeys(alice)
+                                    .SignTransaction(unsigned);
+            Console.WriteLine("Check signed:");
+            Helpers.ChangeColor();
+            Console.WriteLine(aliceSigned);
+            Helpers.ResetColor();
+
+            Transaction bobSigned = builder
+                                    .AddCoins(coin)
+                                    .AddKeys(bob)
+                                    //At this line, SignTransaction(unSigned) has the identical functionality with the SignTransaction(aliceSigned).
+                                    //It's because unsigned transaction has already been signed by Alice privateKey from above.
+                                    .SignTransaction(aliceSigned);
+
+            Transaction fullySigned = builder
+                                        .AddCoins(coin)
+                                        .CombineSignatures(aliceSigned, bobSigned);
+
+            Console.WriteLine(fullySigned);
+            Console.WriteLine("End of book example");
+            Console.WriteLine();
+        }
+
         public void MultiSig(string seed0, string seed1, string seed2, string seed3)
         {
             //https://programmingblockchain.gitbooks.io/programmingblockchain/content/other_types_of_ownership/multi_sig.html
-            HDWallet walletBob = new HDWallet(seed0);
-            HDWallet walletAlice = new HDWallet(seed1);
-            HDWallet walletSatoshi = new HDWallet(seed2);
+            HDWallet walletAlice = new HDWallet(seed1); //signer 1
+            HDWallet walletBob = new HDWallet(seed0); //signer 2
+            HDWallet walletSatoshi = new HDWallet(seed2); //does not sign
+            HDWallet walletNico = new HDWallet(seed3);
             uint path = 0;
-            var keyBob = walletBob.GetPublicKey(path);
-            var keyAlice = walletAlice.GetPublicKey(path);
-            var keySatoshi = walletAlice.GetPublicKey(path);
-
+            ExtPubKey keyBob = walletBob.GetPublicKey(path);
+            ExtPubKey keyAlice = walletAlice.GetPublicKey(path);
+            ExtPubKey keySatoshi = walletAlice.GetPublicKey(path);
+            BitcoinAddress addressNico = walletNico.GetBitcoinAddress(path); //recipient of transaction
 
             Console.WriteLine("Generate a script to receive coins, it will require 2 of 3 signatures to spend.");
             var scriptPubKey = PayToMultiSigTemplate.Instance.GenerateScriptPubKey(2, new[] { keyBob.PubKey, keyAlice.PubKey, keySatoshi.PubKey });
             Console.WriteLine(scriptPubKey);
-            Console.WriteLine();
+
             Console.WriteLine("Received coins in a transaction");
             var received = new Transaction();
             received.Outputs.Add(new TxOut(Money.Coins(1.0m), scriptPubKey));
-            Console.WriteLine("Bob and Alice agree to pay Nico the coin");
             Coin coin = received.Outputs.AsCoins().First();
             //Nico's wallet.
-            HDWallet walletNico = new HDWallet(seed3);
-            BitcoinAddress addressNico = walletNico.GetBitcoinAddress(path);
+           
+            //use the transaction builder to build an unsigned transaction to Nico.
             TransactionBuilder builder = new TransactionBuilder();
-            //build an unsigned transaction
             Transaction unsigned = builder.AddCoins(coin).Send(addressNico, Money.Coins(1.0m)).BuildTransaction(sign: false);
             Helpers.ChangeColor();
             Console.WriteLine(unsigned);
             Helpers.ResetColor();
             Console.WriteLine("Alice signs transaction:");
-            Transaction aliceSigned = builder.AddCoins(coin).AddKeys(walletAlice.GetPrivateKey()).SignTransaction(unsigned);            
+            //Key alice = walletAlice.GetPrivateKey().PrivateKey;
+            Transaction aliceSigned = builder.AddCoins(coin).AddKeys(walletAlice.GetPrivateKey(path)).SignTransaction(unsigned);            
+
             Helpers.ChangeColor();
             Console.WriteLine(aliceSigned);
+            Console.WriteLine("Script sig, one 0 should be replaced with a hash sig");
             Helpers.ResetColor();
             Console.WriteLine("Bob signs transaction:");
             //At this line, SignTransaction(unSigned) has the identical functionality with the SignTransaction(aliceSigned).
             //It's because unsigned transaction has already been signed by Alice privateKey from above.
-            Transaction bobSigned = builder.AddCoins(coin).AddKeys(walletBob.GetPrivateKey()).SignTransaction(aliceSigned);            
+            Transaction bobSigned = builder.AddCoins(coin).AddKeys(walletBob.GetPrivateKey(path)).SignTransaction(aliceSigned);            
             Helpers.ChangeColor();
             Console.WriteLine(bobSigned);
             Helpers.ResetColor();

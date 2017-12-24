@@ -23,6 +23,8 @@ namespace LightningConsole
 
 
             WitnessTests witnessTests = new WitnessTests(seeds[0]);
+            //witnessTests.MultiSigFromBook();
+
             Console.WriteLine("Multi Sig");
             witnessTests.MultiSig(seeds[0], seeds[1], seeds[2], seeds[3]);
 

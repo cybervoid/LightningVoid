@@ -12,7 +12,7 @@ namespace LightningLibrary.Wallets
     public class HDWallet : IWallet
     {
         private byte[] _seed { get; set; }
-        private ExtKey _PrivateKey { get; set; }
+        private ExtKey _MasterPrivateKey { get; set; }
         private ExtPubKey _MasterPublicKey { get; set; }
         private Network _Network { get; set; }
         public WalletType Type { get; set; }
@@ -28,15 +28,31 @@ namespace LightningLibrary.Wallets
         public HDWallet(string seed, Network network)
         {
             _seed = Encoding.Unicode.GetBytes(seed);            
-            _PrivateKey = new ExtKey(_seed);
-            _MasterPublicKey = _PrivateKey.Neuter();
+            _MasterPrivateKey = new ExtKey(_seed);
+            _MasterPublicKey = _MasterPrivateKey.Neuter();
             this._Network = network;
         }
         
         public ExtKey GetPrivateKey()
         {                
-            return _PrivateKey;            
+            return _MasterPrivateKey;            
         }
+
+        public ExtKey GetPrivateKey(uint path)
+        {
+            //possibility 1
+            string wifMaybe = _MasterPrivateKey.Derive(path).ToString(_Network);
+            return ExtKey.Parse(wifMaybe);
+
+            //possible 2
+            //string wifStr = _MasterPublicKey.Derive(path).ToString(_Network);
+            //return ExtKey.Parse(wifStr);
+           
+
+            //possibility 3
+            //return _MasterPrivateKey.Derive(path);
+        }
+
 
         public ExtPubKey GetPublicKey()
         {
