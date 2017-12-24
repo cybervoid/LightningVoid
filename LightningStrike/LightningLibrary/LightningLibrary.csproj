@@ -79,6 +79,10 @@
     <Compile Include="Tests\WitnessTests.cs" />
     <Compile Include="Wallets\IWallet.cs" />
     <Compile Include="Wallets\WalletType.cs" />
+    <Compile Include="Atomic\Interaction.cs" />
+    <Compile Include="Atomic\Party.cs" />
+    <Compile Include="Atomic\ATransaction.cs" />
+    <Compile Include="Atomic\CoinType.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
@@ -88,6 +92,11 @@
     <None Include="rpc.proto">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Atomic\Algorithm.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Atomic\" />
+    <Folder Include="Atomic\Basic\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Grpc.Core.1.8.0\build\net45\Grpc.Core.targets" Condition="Exists('..\packages\Grpc.Core.1.8.0\build\net45\Grpc.Core.targets')" />
