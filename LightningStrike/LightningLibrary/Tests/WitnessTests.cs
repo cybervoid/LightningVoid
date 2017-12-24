@@ -154,6 +154,28 @@ namespace LightningLibrary.Tests
             Helpers.ResetColor();
         }
 
+        /// <summary>
+        /// Pay 2 script hash - pre-segwit
+        /// </summary>
+        public void P2SH(string seed0, string seed1, string seed2, string seed3)
+        {
+            //https://programmingblockchain.gitbooks.io/programmingblockchain/content/other_types_of_ownership/p2sh_pay_to_script_hash.html
+            HDWallet walletAlice = new HDWallet(seed1); //signer 1
+            HDWallet walletBob = new HDWallet(seed0); //signer 2
+            HDWallet walletSatoshi = new HDWallet(seed2); //does not sign
+            HDWallet walletNico = new HDWallet(seed3);
+            uint path = 0;
+
+            ExtKey bobPrivKey = walletBob.GetPrivateKey(path);
+            ExtPubKey keyBob = walletBob.GetPublicKey(path);
+
+            Console.WriteLine("Gen Pub Address:\t" + keyBob.PubKey.GetAddress(Network.Main));
+            Console.WriteLine("Gen Prv Address:\t" + bobPrivKey.PrivateKey.PubKey.GetAddress(Network.Main));
+            //ExtPubKey keyAlice = walletAlice.GetPublicKey(path);
+            //ExtPubKey keySatoshi = walletAlice.GetPublicKey(path);
+            Console.WriteLine();
+        }
+
         public void P2WSHScript()
         {
             Console.WriteLine("P2WSH (Pay to Witness Script Hash)");

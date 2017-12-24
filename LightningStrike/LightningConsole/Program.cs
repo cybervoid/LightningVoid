@@ -12,7 +12,7 @@ namespace LightningConsole
         {
 
             LightningTests lightningTests = new LightningTests();
-            lightningTests.RPCTest();
+            //lightningTests.RPCTest();
 
             Dictionary<int, string> seeds = new Dictionary<int, string>();
             seeds.Add(0, "ryanseed_0");
@@ -23,7 +23,9 @@ namespace LightningConsole
 
 
             WitnessTests witnessTests = new WitnessTests(seeds[0]);
-            //witnessTests.MultiSigFromBook();
+            witnessTests.P2SH(seeds[0], seeds[1], seeds[2], seeds[3]);
+
+            witnessTests.MultiSigFromBook();
 
             Console.WriteLine("Multi Sig");
             witnessTests.MultiSig(seeds[0], seeds[1], seeds[2], seeds[3]);

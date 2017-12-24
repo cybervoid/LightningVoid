@@ -11,10 +11,10 @@ namespace LightningLibrary.Wallets
     /// </summary>
     public class HDWallet : IWallet
     {
-        private byte[] _seed { get; set; }
-        private ExtKey _MasterPrivateKey { get; set; }
-        private ExtPubKey _MasterPublicKey { get; set; }
-        private Network _Network { get; set; }
+        private byte[] _seed;
+        private ExtKey _MasterPrivateKey;
+        private ExtPubKey _MasterPublicKey; 
+        private Network _Network; 
         public WalletType Type { get; set; }
         /// <summary>
         /// Uses the main network as default
