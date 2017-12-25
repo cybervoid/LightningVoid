@@ -84,7 +84,8 @@ namespace LightningLibrary.Objects
                     return null;
             }
         }
-
+        [JsonIgnore]
+        public Network _Network { get; set; }
         [JsonIgnore]
         private Money _Amount;
         [JsonIgnore]

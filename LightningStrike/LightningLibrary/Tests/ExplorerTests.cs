@@ -49,9 +49,12 @@ namespace LightningLibrary.Tests
 
             
             TransactionBuilder builder = new TransactionBuilder();
-            Transaction unsigned = builder.AddCoins(coin).Send(destination, unspent[0].Amount).AddKeys(key).BuildTransaction(true);
 
-            Console.WriteLine(unsigned);
+            Transaction unsigned = builder.AddCoins(received).Send(destination, unspent[0].Amount).BuildTransaction(sign: false);
+           
+            Transaction signed = builder.AddKeys(key.PrivateKey).SignTransaction(unsigned);
+
+            Console.WriteLine(signed);
             Console.WriteLine(s);
             Console.ReadLine();
         }
