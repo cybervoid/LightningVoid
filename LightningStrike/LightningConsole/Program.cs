@@ -11,7 +11,9 @@ namespace LightningConsole
         public static void Main(string[] args)
         {
 
-            LightningTests lightningTests = new LightningTests();
+
+
+            //LightningTests lightningTests = new LightningTests();
             //lightningTests.RPCTest();
 
             Dictionary<int, string> seeds = new Dictionary<int, string>();
@@ -20,6 +22,9 @@ namespace LightningConsole
             seeds.Add(2, "ryanseed_2");
             seeds.Add(3, "ryanseed_3");
             LightningLibrary.Wallets.HDWallet hDWallet = new LightningLibrary.Wallets.HDWallet("ryan1seed");
+
+            ExplorerTests explorerTests = new ExplorerTests();
+            explorerTests.GetUnspent();
 
 
             WitnessTests witnessTests = new WitnessTests(seeds[0]);

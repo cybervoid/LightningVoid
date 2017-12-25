@@ -87,6 +87,9 @@
     <Compile Include="Utilities\Helpers.cs" />
     <Compile Include="Utilities\Segwit.cs" />
     <Compile Include="REST\Insights.cs" />
+    <Compile Include="REST\BlockExplorer.cs" />
+    <Compile Include="Tests\ExplorerTests.cs" />
+    <Compile Include="Objects\ExplorerUnspent.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
@@ -105,6 +108,7 @@
     <Folder Include="Atomic\Algorithmic\" />
     <Folder Include="Atomic\NBitcoin\" />
     <Folder Include="Documentation\" />
+    <Folder Include="Objects\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Grpc.Core.1.8.0\build\net45\Grpc.Core.targets" Condition="Exists('..\packages\Grpc.Core.1.8.0\build\net45\Grpc.Core.targets')" />

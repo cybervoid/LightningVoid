@@ -5,7 +5,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using Newtonsoft.Json;
 namespace LightningLibrary.Utilities
 {
     public static class Extensions
@@ -36,6 +36,17 @@ namespace LightningLibrary.Utilities
                 return (Uri.TryCreate(source, UriKind.RelativeOrAbsolute, out tempValue));
             }
             return (false);
+        }
+
+        //public static T FromJson<T>(this object obj)
+        //{
+        //    return (T)JsonConvert.DeserializeObject<T>(obj);
+                    
+        //}
+
+        public static string ToJson(this object obj)
+        {
+            return JsonConvert.SerializeObject(obj);
         }
     }
 }
