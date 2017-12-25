@@ -18,19 +18,27 @@ namespace LightningLibrary.REST
             client = new RestSharp.RestClient(url);
         }
 
-        public void GetUnspent(string address, bool noCache = false)
+        public ExplorerResponse GetUnspent(string address, bool noCache = false)
         {
-            // /api/addr/[:addr]/utxo[?noCache=1]
-            string resource = $"/api/addr/{address}/utxo";
-            if (noCache == true)
-                resource += "?noCache=1";
-            var request = new RestRequest(resource, Method.GET);
-            IRestResponse response = client.Execute(request);
-            var content = response.Content; // raw content as string
-            Console.WriteLine(content);
-            List<Objects.ExplorerUnspent> unspent = JsonConvert.DeserializeObject<List<ExplorerUnspent>>(content);
+            ExplorerResponse exResponse = new ExplorerResponse();
+            try
+            {
+                // /api/addr/[:addr]/utxo[?noCache=1]
+                string resource = $"/api/addr/{address}/utxo";
+                if (noCache == true)
+                    resource += "?noCache=1";
+                var request = new RestRequest(resource, Method.GET);
+                IRestResponse response = client.Execute(request);
+                var content = response.Content; // raw content as string
 
-            string x = "";
+                exResponse.json = response.Content;
+                List<Objects.ExplorerUnspent> unspent = JsonConvert.DeserializeObject<List<ExplorerUnspent>>(content);
+            }
+            catch(Exception ex)
+            {
+                exResponse.AddError(ex);
+            }
+            return exResponse;
         }
     }
 }

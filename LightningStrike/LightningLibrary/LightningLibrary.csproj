@@ -90,6 +90,9 @@
     <Compile Include="REST\BlockExplorer.cs" />
     <Compile Include="Tests\ExplorerTests.cs" />
     <Compile Include="Objects\ExplorerUnspent.cs" />
+    <Compile Include="Objects\ExplorerRequest.cs" />
+    <Compile Include="Objects\ExplorerResponse.cs" />
+    <Compile Include="Objects\BaseObjects.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
