@@ -356,7 +356,7 @@ namespace LightningLibrary.Tests
 
             var segwitAddress = segwit.GetSegwitAddress(walletAlice.GetPrivateKey(path));
 
-            Console.WriteLine(segwitAddress.ToString());
+            Console.WriteLine("Segwit Address:\t" + segwitAddress.ToString());
         }
     }
 }

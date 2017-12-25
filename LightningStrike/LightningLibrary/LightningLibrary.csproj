@@ -86,6 +86,7 @@
     <Compile Include="Atomic\NBitcoin\SwapBuilder.cs" />
     <Compile Include="Utilities\Helpers.cs" />
     <Compile Include="Utilities\Segwit.cs" />
+    <Compile Include="REST\Insights.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
