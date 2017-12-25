@@ -346,8 +346,17 @@ namespace LightningLibrary.Tests
             Console.WriteLine("Script " + scriptPubKey);
             Console.WriteLine("With P2SH Payment: " + scriptPubKey.PaymentScript);
             Console.WriteLine(scriptPubKey.PaymentScript.Hash.GetAddress(Network.Main));
+        }
 
+        public void SegwitAddressTest(string seed)
+        {
+            HDWallet walletAlice = new HDWallet(seed);
+            uint path = 0;
+            Segwit segwit = new Segwit(NBitcoin.Network.Main);
 
+            var segwitAddress = segwit.GetSegwitAddress(walletAlice.GetPrivateKey(path));
+
+            Console.WriteLine(segwitAddress.ToString());
         }
     }
 }
