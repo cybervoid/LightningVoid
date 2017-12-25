@@ -37,6 +37,8 @@ namespace LightningLibrary.Tests
             //2MwZsLbuB328gxHRfr1VDrfDrK6aWicQcAW
             //https://www.blocktrail.com/tBTC/tx/6636b3fedb57be81232f92f80fa8d3df9a0f07305af2c7f705a7f353e516b1d7
             var response = explorer.GetUnspent(s.ToString());
+            Console.WriteLine(response.data);
+            string content = "[{\"address\":\"2MwZsLbuB328gxHRfr1VDrfDrK6aWicQcAW\",\"txid\":\"6636b3fedb57be81232f92f80fa8d3df9a0f07305af2c7f705a7f353e516b1d7\",\"vout\":0,\"scriptPubKey\":\"a9142f672b3ea4af55d9da43e507e3c060d2e34521ba87\",\"amount\":2,\"satoshis\":200000000,\"height\":1255946,\"confirmations\":4}]";
             List<ExplorerUnspent> unspent = JsonConvert.DeserializeObject<List<ExplorerUnspent>>(response.data);
 
             Transaction received = new Transaction();
@@ -51,7 +53,7 @@ namespace LightningLibrary.Tests
             TransactionBuilder builder = new TransactionBuilder();
 
             Transaction unsigned = builder.AddCoins(received).Send(destination, unspent[0].Amount).BuildTransaction(sign: false);
-           
+            
             Transaction signed = builder.AddKeys(key.PrivateKey).SignTransaction(unsigned);
 
             Console.WriteLine(signed);
