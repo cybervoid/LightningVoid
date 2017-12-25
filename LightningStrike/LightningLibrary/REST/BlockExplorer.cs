@@ -18,6 +18,11 @@ namespace LightningLibrary.REST
             client = new RestSharp.RestClient(url);
         }
 
+        public BlockExplorer(string _url)
+        {
+             client = new RestSharp.RestClient(_url);
+        }
+
         public ExplorerResponse GetUnspent(string address, bool noCache = false)
         {
             ExplorerResponse exResponse = new ExplorerResponse();
@@ -31,8 +36,8 @@ namespace LightningLibrary.REST
                 IRestResponse response = client.Execute(request);
                 var content = response.Content; // raw content as string
 
-                exResponse.json = response.Content;
-                List<Objects.ExplorerUnspent> unspent = JsonConvert.DeserializeObject<List<ExplorerUnspent>>(content);
+                exResponse.data = response.Content;
+                //List<Objects.ExplorerUnspent> unspent = JsonConvert.DeserializeObject<List<ExplorerUnspent>>(content);
             }
             catch(Exception ex)
             {

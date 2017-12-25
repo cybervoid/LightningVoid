@@ -59,9 +59,9 @@ namespace LightningLibrary.Utilities
             return GetSegwitAddress(key.ToArray(), requiredSignatures);
         }
 
-        public void GetSegwitScriptPubKey(ExtKey key)
+        public Script GetSegwitScriptPubKey(ExtKey key)
         {
-            GetSegwitScriptPubKey(key.PrivateKey);
+            return GetSegwitScriptPubKey(key.PrivateKey);
         }
 
         public Script GetSegwitScriptPubKey(Key key)

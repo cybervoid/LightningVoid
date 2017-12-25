@@ -24,8 +24,8 @@ namespace LightningConsole
             LightningLibrary.Wallets.HDWallet hDWallet = new LightningLibrary.Wallets.HDWallet("ryan1seed");
 
             ExplorerTests explorerTests = new ExplorerTests();
-            explorerTests.GetUnspent();
-
+            //explorerTests.GetUnspent();
+            explorerTests.GetUnspentTestNet();
 
             WitnessTests witnessTests = new WitnessTests(seeds[0]);
             witnessTests.SegwitAddressTest(seeds[0]);
