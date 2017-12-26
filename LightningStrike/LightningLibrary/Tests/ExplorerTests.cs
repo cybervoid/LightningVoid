@@ -62,9 +62,8 @@ namespace LightningLibrary.Tests
                 transactions.Add(tx);
             }
             //For spending, it works the same as a a normal P2SH
-            //You need to get the ScriptCoin, the RedeemScript of you script coin should be k.PubKey.WitHash.ScriptPubKey.
+            //You need to get the ScriptCoin, the RedeemScript of you script coin should be k.PubKey.WitHash.ScriptPubKey.            var redeemScript = k.PubKey.WitHash.ScriptPubKey;
             var redeemScript = k.PubKey.WitHash.ScriptPubKey;
-
             Transaction received = transactions[0];
             ScriptCoin coin = received.Outputs.AsCoins().First().ToScriptCoin(redeemScript);
             //1397a4cc480879eae604ce871c47a4d690c6ea6a6dcfd7e38d95f31b81593556
@@ -78,7 +77,7 @@ namespace LightningLibrary.Tests
             builder.SetChange(p2sh);
             var signedTx = builder.BuildTransaction(true);
 
-            Console.WriteLine(signedTx);
+            Console.WriteLine(signedTx.ToHex());
             string x = ";;";
             //Assert.True(builder.Verify(signedTx));
         }
