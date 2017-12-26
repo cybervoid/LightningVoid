@@ -25,7 +25,8 @@ namespace LightningConsole
 
             ExplorerTests explorerTests = new ExplorerTests();
             //explorerTests.GetUnspent();
-            explorerTests.GetUnspentTestNet();
+            explorerTests.SegwitTestNet();
+            //explorerTests.GetUnspentTestNet();
 
             WitnessTests witnessTests = new WitnessTests(seeds[0]);
             witnessTests.SegwitAddressTest(seeds[0]);
