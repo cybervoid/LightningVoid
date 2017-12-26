@@ -45,5 +45,26 @@ namespace LightningLibrary.REST
             }
             return exResponse;
         }
+
+        public ExplorerResponse GetTransaction(string txid)
+        {
+            ExplorerResponse exResponse = new ExplorerResponse();
+            try
+            {
+
+                string resource = $"/api/tx/{txid}";
+                var request = new RestRequest(resource, Method.GET);
+                RestResponse response = (RestSharp.RestResponse)client.Execute(request);
+                //var content = response.Content; // raw content as string
+
+                exResponse.data = response.Content; // "[" + response.Content + "]";
+                //List<Objects.ExplorerUnspent> unspent = JsonConvert.DeserializeObject<List<ExplorerUnspent>>(content);
+            }
+            catch (Exception ex)
+            {
+                exResponse.AddError(ex);
+            }
+            return exResponse;
+        }
     }
 }

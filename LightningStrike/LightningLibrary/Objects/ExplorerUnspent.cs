@@ -84,8 +84,7 @@ namespace LightningLibrary.Objects
                     return null;
             }
         }
-        [JsonIgnore]
-        public Network _Network { get; set; }
+
         [JsonIgnore]
         private Money _Amount;
         [JsonIgnore]
@@ -100,14 +99,20 @@ namespace LightningLibrary.Objects
             }
         }
 
-        public TxOut AsOutput()
-        {
-            return new TxOut(Amount, scriptPubKey);
-        }
+        //public BitcoinScriptAddress GetBitcoinScriptAddress(Network network)
+        //{
+        //    return BitcoinScriptAddress.Create(sScriptPubKey, network);
+        //}
 
-        public TxIn AsInput()
-        {
-            return new TxIn(scriptPubKey);
-        }
+        //public TxOut AsOutput()
+        //{
+            //return new TxOut(Amount, GetBitcoinScriptAddress(Network.TestNet));
+        //    return new TxOut(Amount, scriptPubKey.PaymentScript);
+        //}
+
+        //public TxIn AsInput()
+        //{
+        //    return new TxIn(scriptPubKey);
+        //}
     }
 }
