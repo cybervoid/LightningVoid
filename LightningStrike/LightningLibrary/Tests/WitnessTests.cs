@@ -354,9 +354,9 @@ namespace LightningLibrary.Tests
             uint path = 0;
             Segwit segwit = new Segwit(NBitcoin.Network.Main);
 
-            var segwitAddress = segwit.GetSegwitAddress(walletAlice.GetPrivateKey(path));
+            //var segwitAddress = segwit.GetSegwitAddress(walletAlice.GetPrivateKey(path));
 
-            Console.WriteLine("Segwit Address:\t" + segwitAddress.ToString());
+            //Console.WriteLine("Segwit Address:\t" + segwitAddress.ToString());
         }
     }
 }
