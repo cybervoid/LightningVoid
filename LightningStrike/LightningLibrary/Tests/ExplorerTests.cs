@@ -35,13 +35,19 @@ namespace LightningLibrary.Tests
             uint path = 0;
             var key = wallet.GetPrivateKey(path);
 
+            //BitcoinWitScriptAddress bwitScriptAdd = key.ScriptPubKey.GetWitScriptAddress(net);//BitcoinWitScriptAddress.Create(wa)
+            //var x = bwitScriptAdd.
+            //BitcoinWitPubKeyAddress bwitPubKeyAdd = key.PrivateKey.ScriptPubKey.
             Segwit segwit = new Segwit(net);
             var s = segwit.GetSegwitAddress(key);
+            var redeem = s.ScriptPubKey.WitHash.ScriptPubKey.Hash.ScriptPubKey;
+            var scrpt = segwit.CreateSegwitScript(wallet.GetPublicKey(path).PubKey);
+            var xx = scrpt.Hash.GetAddress(net);
             //txid = 6636b3fedb57be81232f92f80fa8d3df9a0f07305af2c7f705a7f353e516b1d7
             //2MwZsLbuB328gxHRfr1VDrfDrK6aWicQcAW
             //https://www.blocktrail.com/tBTC/tx/6636b3fedb57be81232f92f80fa8d3df9a0f07305af2c7f705a7f353e516b1d7
             var response = explorer.GetUnspent(s.ToString());
-            Console.WriteLine(response.data);
+            //Console.WriteLine(response.data);
             string content = "[{\"address\":\"2MwZsLbuB328gxHRfr1VDrfDrK6aWicQcAW\",\"txid\":\"6636b3fedb57be81232f92f80fa8d3df9a0f07305af2c7f705a7f353e516b1d7\",\"vout\":0,\"scriptPubKey\":\"a9142f672b3ea4af55d9da43e507e3c060d2e34521ba87\",\"amount\":2,\"satoshis\":200000000,\"height\":1255946,\"confirmations\":4}]";
             List<ExplorerUnspent> unspent = response.Convert<List<ExplorerUnspent>>();//JsonConvert.DeserializeObject<List<ExplorerUnspent>>(response.data);
 
@@ -63,7 +69,10 @@ namespace LightningLibrary.Tests
             //var hash = script.Hash.GetAddress(net);
             //.PubKey.ScriptPubKey.WitHash.ScriptPubKey.Hash.ScriptPubKey
             //.PubKey.WitHash.ScriptPubKey.Hash.ScriptPubKey
-            ScriptCoin coin = received.Outputs.AsCoins().First().ToScriptCoin(key.PrivateKey.PubKey.ScriptPubKey.WitHash.ScriptPubKey.Hash.ScriptPubKey);
+            ScriptCoin coin = received.Outputs.AsCoins().First().ToScriptCoin(redeem); //<--- I *THINK* this correct?
+            //ScriptCoin coin = received.Outputs.AsCoins().First().ToScriptCoin(pubkey.PubKey.ScriptPubKey.WitHash.ScriptPubKey.Hash.ScriptPubKey); //<--- I *THINK* this correct?
+
+
             //var coin = received.Outputs.AsCoins().First();//.ToScriptCoin();
             //var outtx = received.Outputs[0];
             //TxDestination expectedDestination = GetRedeemHash(outtx.ScriptPubKey);
