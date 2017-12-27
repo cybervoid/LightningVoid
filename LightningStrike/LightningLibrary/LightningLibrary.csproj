@@ -96,6 +96,7 @@
     <Compile Include="Objects\ExplorerRequest.cs" />
     <Compile Include="Objects\ExplorerResponse.cs" />
     <Compile Include="Objects\BaseObjects.cs" />
+    <Compile Include="Utilities\MultiSig.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
