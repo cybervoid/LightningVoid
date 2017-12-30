@@ -80,18 +80,33 @@ namespace LightningLibrary.Utilities
 
         #endregion
 
-        #region Segwit Redeem Script
-        public Script GetRedeemScript(ExtKey key)
+        #region Multisig Segwit Redeem Script
+
+        public Script GetRedeemScript(int minimumSignatures, ExtKey[] keys)
         {
-            return GetRedeemScript(key.PrivateKey);
+            List<PubKey> pubKeys = new List<PubKey>();
+            for (int i = 0; i < keys.Length; i++)
+            {
+                pubKeys.Add(keys[i].PrivateKey.PubKey);
+            }
+            return GetRedeemScript(minimumSignatures, pubKeys.ToArray());
         }
 
-        public Script GetRedeemScript(Key key)
+        public Script GetRedeemScript(int minimumSignatures, Key[] keys)
         {
-
-            return key.PubKey.WitHash.ScriptPubKey;
+            List<PubKey> pubKeys = new List<PubKey>();
+            for (int i = 0; i < keys.Length; i++)
+            {
+                pubKeys.Add(keys[i].PubKey);
+            }
+            return GetRedeemScript(minimumSignatures, pubKeys.ToArray());
         }
 
+        public Script GetRedeemScript(int minimumSignatures, PubKey[] keys)
+        {
+            return GetPublicKeyScript(minimumSignatures, keys);
+           
+        }
 
         public Script CreateMultiSigScript(PubKey[] keys, int requiredSignatures = 1)
         {

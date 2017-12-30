@@ -28,6 +28,8 @@ namespace LightningConsole
 
             LightningLibrary.Wallets.HDWallet hDWallet = new LightningLibrary.Wallets.HDWallet("ryan1seed");
             LightningTests lightningTests = new LightningTests();
+            lightningTests.TxDebug((uint)0, seeds[0], seeds[1]);
+
             lightningTests.CreateBasicSwap((uint)0, seeds[0], seeds[1]);
 
             ExplorerTests explorerTests = new ExplorerTests();
