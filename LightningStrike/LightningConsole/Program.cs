@@ -6,22 +6,29 @@ namespace LightningConsole
 {
     class MainClass
     {
-
+        static Dictionary<int, string> seeds;
+        public static void Initialize()
+        {
+            seeds = new Dictionary<int, string>();
+            seeds.Add(0, "ryanseed_0");
+            seeds.Add(1, "ryanseed_1");
+            seeds.Add(2, "ryanseed_2");
+            seeds.Add(3, "ryanseed_3");
+            seeds.Add(4, "ryan1seed");
+            seeds.Add(5, "seed12345678ryan12345678");
+        }
 
         public static void Main(string[] args)
         {
-
+            Initialize();
 
 
             //LightningTests lightningTests = new LightningTests();
             //lightningTests.RPCTest();
 
-            Dictionary<int, string> seeds = new Dictionary<int, string>();
-            seeds.Add(0, "ryanseed_0");
-            seeds.Add(1, "ryanseed_1");
-            seeds.Add(2, "ryanseed_2");
-            seeds.Add(3, "ryanseed_3");
             LightningLibrary.Wallets.HDWallet hDWallet = new LightningLibrary.Wallets.HDWallet("ryan1seed");
+            LightningTests lightningTests = new LightningTests();
+            lightningTests.CreateBasicSwap((uint)0, seeds[0], seeds[1]);
 
             ExplorerTests explorerTests = new ExplorerTests();
             //explorerTests.GetUnspent();

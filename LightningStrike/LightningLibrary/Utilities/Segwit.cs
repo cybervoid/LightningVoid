@@ -89,10 +89,10 @@ namespace LightningLibrary.Utilities
         /// Gets the Segwit backward compatible address. (Send money to this address)
         /// </summary>
         /// <returns>The p2sh address.</returns>
-        public BitcoinScriptAddress GetP2SHAddress(Key k)
+        public BitcoinScriptAddress GetP2SHAddress(Key key)
         {
             //This gives you a Bech32 address (currently not really interoperable in wallets, so you need to convert it into P2SH)
-            var address = k.PubKey.WitHash.GetAddress(_Network);
+            var address = key.PubKey.WitHash.GetAddress(_Network);
             var p2sh = address.GetScriptAddress(); // This is P2SH address.
             return p2sh;
         }
