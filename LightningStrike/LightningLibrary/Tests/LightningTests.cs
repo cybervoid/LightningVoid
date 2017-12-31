@@ -84,7 +84,7 @@ namespace LightningLibrary.Tests
             builder.Send(destination, Money.Coins(1.299m));
             builder.SendFees(Money.Coins(0.001m));
             builder.SetChange(destination);
-
+            //builder.
             var unsigned = builder.BuildTransaction(sign: false);
 
             var signedA = builder.AddCoins(coin).AddKeys(keys[0].PrivateKey).SignTransaction(unsigned);
@@ -95,6 +95,143 @@ namespace LightningLibrary.Tests
             Console.WriteLine(fullySigned.ToHex());
             Console.ReadLine();
         }
+
+        public void StepByStep(uint path, params string[] seed)
+        {
+            List<ExtKey> keys = new List<ExtKey>();
+            Segwit segwit = new Segwit(NBitcoin.Network.TestNet);
+
+            Key bob = GetKey(path, seed[0]).PrivateKey;
+            Key alice = GetKey(path, seed[1]).PrivateKey;
+
+            for (int i = 0; i < seed.Length; i++)
+            {
+                var key = GetKey(path, seed[i]);
+
+                keys.Add(key);
+                //Console.WriteLine(address.ToString());
+            }
+            NBitcoin.Network _Network = NBitcoin.Network.TestNet;
+
+            //MultiSig multi = new MultiSig(NBitcoin.Network.TestNet);
+            List<PubKey> pubKeys = new List<PubKey>();
+            for (int i = 0; i < keys.Count; i++)
+            {
+                pubKeys.Add(keys[i].PrivateKey.PubKey);
+            }
+
+            Console.WriteLine("Section: P2SH (Pay To Script Hash)");
+            Script pubKeyScript = PayToMultiSigTemplate.Instance.GenerateScriptPubKey(2, pubKeys.ToArray());
+            Console.WriteLine("Generated pubKeyScript: \n\r" + pubKeyScript.ToString());
+            Console.WriteLine();
+            Console.WriteLine("P2SH: \t (Pay to Script Hash): Generate Payment Script");
+            var paymentScript = pubKeyScript.PaymentScript;
+            Console.WriteLine(paymentScript.ToString());
+            Console.WriteLine();
+            Console.WriteLine("Generate P2SH:\t(Pay To Script Hash) \t from scriptPubKey");
+            var p2shPayToAddress = pubKeyScript.Hash.GetAddress(_Network);
+            Console.WriteLine(p2shPayToAddress);
+            Console.WriteLine();
+            Console.WriteLine("Simulate a transaction");
+            Transaction p2shReceived = new Transaction();
+            p2shReceived.Outputs.Add(new TxOut(Money.Coins(1.0m), pubKeyScript.Hash)); //Warning: The payment is sent to redeemScript.Hash and not to redeemScript!
+            //A script coin is used to spend when a combination of the owners want to spend the coins
+            ScriptCoin p2shCoin = p2shReceived.Outputs.AsCoins().First().ToScriptCoin(pubKeyScript);
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine("Section: P2WSH (Pay to Witness Script Hash)");
+
+            Console.WriteLine();
+            Console.WriteLine("Simulate a fake P2WSH payment script");
+            var fakeKey = new Key();
+            Console.WriteLine(fakeKey.PubKey.ScriptPubKey.WitHash.ScriptPubKey);
+            //Output: 0 4c55134a297baf494323fd517df5780a0b0e8f7f8f794a0ea79ab94fd4498923
+            Console.WriteLine(pubKeyScript.WitHash.ScriptPubKey);
+            //Output: 0 29ccc4c03f9609ff9f79b0b7d3ade093ffd7da6d37c06edc65bfb898d4aee069
+           
+           Console.WriteLine("Simulate a fake segwit transaction");
+
+            var addressFake = fakeKey.PubKey.WitHash.GetAddress(_Network);
+
+            var p2shFake = addressFake.GetScriptAddress();
+            var redeemScriptFake = fakeKey.PubKey.WitHash.ScriptPubKey;
+            Transaction fakeReceived = new Transaction();
+            fakeReceived.Outputs.Add(new TxOut(Money.Coins(1.0m), redeemScriptFake.WitHash));
+            ScriptCoin coin = fakeReceived.Outputs.AsCoins().First().ToScriptCoin(redeemScriptFake);
+
+            Console.WriteLine("Create a script coin");
+
+            Transaction p2wshReceived = new Transaction();
+            p2wshReceived.Outputs.Add(new TxOut(Money.Coins(1.0m), pubKeyScript.WitHash));
+
+            //Come back to this:
+            ScriptCoin p2wshCoin = p2wshReceived.Outputs.AsCoins().First().ToScriptCoin(pubKeyScript);
+
+
+            Console.ReadLine();
+        }
+
+        public void NewCreateBasicSwap(uint path, params string[] seed)
+        {
+            List<ExtKey> keys = new List<ExtKey>();
+            Segwit segwit = new Segwit(NBitcoin.Network.TestNet);
+            for (int i = 0; i < seed.Length; i++)
+            {
+                var key = GetKey(path, seed[i]);
+                //var address = segwit.GetP2SHAddress(key);
+                keys.Add(key);
+                //Console.WriteLine(address.ToString());
+            }
+            NBitcoin.Network _Network = NBitcoin.Network.TestNet;
+
+            MultiSig multi = new MultiSig(NBitcoin.Network.TestNet);
+            List<PubKey> pubKeys = new List<PubKey>();
+            for (int i = 0; i < keys.Count; i++)
+            {
+                pubKeys.Add(keys[i].PrivateKey.PubKey);
+            }
+            Script pubKeyScript = PayToMultiSigTemplate.Instance.GenerateScriptPubKey(2, pubKeys.ToArray());
+
+            BitcoinAddress address = pubKeyScript.WitHash.GetAddress(_Network);
+            BitcoinScriptAddress p2sh = address.GetScriptAddress();
+            Console.WriteLine("Send money here: " + p2sh.ToString());
+            REST.BlockExplorer explorer = new REST.BlockExplorer("https://testnet.blockexplorer.com/");
+            var response = explorer.GetUnspent(p2sh.ToString());
+            List<ExplorerUnspent> unspent = response.Convert<List<ExplorerUnspent>>();
+            List<Transaction> transactions = new List<Transaction>();
+            foreach (var item in unspent)
+            {
+                ExplorerResponse txResponse = explorer.GetTransaction(item.txid);
+                RawFormat format = RawFormat.Satoshi;
+                var tx = Transaction.Parse(txResponse.data, format, Network.TestNet);
+                transactions.Add(tx);
+            }
+            //Create send transaction.
+
+            //get redeem script
+            //var redeemScript = PayToMultiSigTemplate.Instance.GenerateScriptPubKey(2, pubKeys.ToArray());// multi.GetRedeemScript(2, keys.ToArray());
+
+            Transaction received = transactions[0];
+            ScriptCoin coin = received.Outputs.AsCoins().First().ToScriptCoin(pubKeyScript.WitHash.ScriptPubKey.Hash.ScriptPubKey);
+            //create transaction:
+            BitcoinAddress destination = BitcoinAddress.Create("2N8hwP1WmJrFF5QWABn38y63uYLhnJYJYTF"); //the faucet return address
+            TransactionBuilder builder = new TransactionBuilder();
+            builder.AddCoins(coin);
+            builder.Send(destination, Money.Coins(1.299m));
+            builder.SendFees(Money.Coins(0.001m));
+            builder.SetChange(destination);
+            //builder.
+            var unsigned = builder.BuildTransaction(sign: false);
+
+            var signedA = builder.AddCoins(coin).AddKeys(keys[0].PrivateKey).SignTransaction(unsigned);
+            Transaction signedB = builder.AddCoins(coin).AddKeys(keys[1].PrivateKey).SignTransaction(signedA);
+
+            Transaction fullySigned = builder.AddCoins(coin).CombineSignatures(signedA, signedB);
+
+            Console.WriteLine(fullySigned.ToHex());
+            Console.ReadLine();
+        }
+
 
         public ExtKey GetKey(uint path, string seed)
         {

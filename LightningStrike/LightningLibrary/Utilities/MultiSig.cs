@@ -56,9 +56,24 @@ namespace LightningLibrary.Utilities
         }
 
 
+        public void Full(int minimumSignatures, Key[] keys)
+        {
+            List<PubKey> pubKeys = new List<PubKey>();
+            for (int i = 0; i < keys.Length; i++)
+            {
+                pubKeys.Add(keys[i].PubKey);
+            }
+            Script pubKeyScript = PayToMultiSigTemplate.Instance.GenerateScriptPubKey(minimumSignatures, pubKeys.ToArray());
+
+            var address = pubKeyScript.WitHash.GetAddress(_Network);
+            var p2sh = address.GetScriptAddress();
+            Console.WriteLine("Send money here: " + p2sh.ToString());
+
+
+        }
         #endregion
 
-        #region Segwit Address
+        #region Multi-Sig Segwit Address
         public BitcoinScriptAddress GetP2SHAddress(Key key)
         {
             //OLD
