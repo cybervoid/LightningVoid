@@ -96,6 +96,11 @@ namespace LightningLibrary.Tests
             Console.ReadLine();
         }
 
+        /// <summary>
+        /// This method implements the Programming Blockchain code multi-signature transactions as segwit enabled.
+        /// </summary>
+        /// <param name="path">Path.</param>
+        /// <param name="seed">Seed.</param>
         public void StepByStep(uint path, params string[] seed)
         {
             List<ExtKey> keys = new List<ExtKey>();
@@ -107,7 +112,6 @@ namespace LightningLibrary.Tests
             for (int i = 0; i < seed.Length; i++)
             {
                 var key = GetKey(path, seed[i]);
-
                 keys.Add(key);
                 //Console.WriteLine(address.ToString());
             }
@@ -149,26 +153,69 @@ namespace LightningLibrary.Tests
             Console.WriteLine(pubKeyScript.WitHash.ScriptPubKey);
             //Output: 0 29ccc4c03f9609ff9f79b0b7d3ade093ffd7da6d37c06edc65bfb898d4aee069
            
-           Console.WriteLine("Simulate a fake segwit transaction");
-
+            Console.WriteLine("Simulate a fake segwit transaction");
             var addressFake = fakeKey.PubKey.WitHash.GetAddress(_Network);
-
             var p2shFake = addressFake.GetScriptAddress();
             var redeemScriptFake = fakeKey.PubKey.WitHash.ScriptPubKey;
             Transaction fakeReceived = new Transaction();
             fakeReceived.Outputs.Add(new TxOut(Money.Coins(1.0m), redeemScriptFake.WitHash));
             ScriptCoin coin = fakeReceived.Outputs.AsCoins().First().ToScriptCoin(redeemScriptFake);
-
             Console.WriteLine("Create a script coin");
-
             Transaction p2wshReceived = new Transaction();
             p2wshReceived.Outputs.Add(new TxOut(Money.Coins(1.0m), pubKeyScript.WitHash));
-
-            //Come back to this:
+            //This did not throw an error:
             ScriptCoin p2wshCoin = p2wshReceived.Outputs.AsCoins().First().ToScriptCoin(pubKeyScript);
 
 
+            throw new NotSupportedException("P2W over P2SH is NOT Multi-sig compatible!");
+            //Source: https://bitcoincore.org/en/segwit_wallet_dev/#creation-of-p2sh-p2wpkh-address
+
+            Console.WriteLine();
+            Console.WriteLine("Section: P2W* over P2SH");
+            Console.WriteLine();
+            Console.WriteLine("Steps to Create a P2W* Over P2SH...");
+            Console.WriteLine("\t1. Replacing the ScriptPubKey by its P2SH equivalent.");
+            Console.WriteLine("\t2. The former ScriptPubKey will be placed as the only push in the scriptSig in the spending transaction");
+            Console.WriteLine("\t3. All other data will be pushed in the witness of the spending transaction.");
+            Console.WriteLine();
+            Console.WriteLine("1. Replacing the ScriptPubKey by its P2SH equivalent.");
+            //todo code to replace Script pub Key
+
+            Console.WriteLine("Printing the ScriptPubKey: (fake)");
+            Console.WriteLine(fakeKey.PubKey.WitHash.ScriptPubKey.Hash.ScriptPubKey);
+            Script fakeScriptPubKey = fakeKey.PubKey.WitHash.ScriptPubKey.Hash.ScriptPubKey;
+            Console.WriteLine("Printing the ScriptPubKey: (multi-sig)");
+            Console.WriteLine(pubKeyScript.WitHash.ScriptPubKey.Hash.ScriptPubKey);
+            Script multiScriptPubKey = pubKeyScript.WitHash.ScriptPubKey.Hash.ScriptPubKey;
+            Console.WriteLine("Which gave us a well known P2SH scriptPubKey.");
+
+            Console.WriteLine("Replacing the ScriptPubKey by its P2SH equivalent.");
+            //Fake
+            Console.WriteLine(fakeKey.PubKey.ScriptPubKey.WitHash.ScriptPubKey.Hash.ScriptPubKey);
+            //Multi sig
+            Console.WriteLine(pubKeyScript.WitHash.ScriptPubKey.Hash.ScriptPubKey);
+            //OR maybe?
+            //Console.WriteLine(pubKeyScript.PaymentScript.WitHash.ScriptPubKey.Hash.ScriptPubKey);
+            Console.WriteLine("2. The former ScriptPubKey will be placed as the only push in the scriptSig in the spending transaction");
+            //todo code to place former ScriptPubKey as the only push in the scriptSig in the spending transaction
+
+
+            Console.WriteLine("3. All other data will be pushed in the witness of the spending transaction.");
+            //todo code to push all other data in the witness of the spending transaction
+            Transaction fake_p2w_over_p2shReceived = new Transaction();
+            fakeReceived.Outputs.Add(new TxOut(Money.Coins(1.0m), redeemScriptFake.WitHash));
+            Transaction p2w_Over_P2shReceived = new Transaction();
+
             Console.ReadLine();
+        }
+
+        public void ScriptExamples()
+        {
+            throw new NotImplementedException("Not yet implemented");
+            //Get examples here: http://n.bitcoin.ninja/checktx
+            //cNUnpYpMsJXYCERYBciJnsWBpcYEFjdcbq6dxj4SskGhs7uHuJ7Q
+            //var _Network = Network.SegNet;
+            Key key = Key.Parse("cNUnpYpMsJXYCERYBciJnsWBpcYEFjdcbq6dxj4SskGhs7uHuJ7Q", Network.TestNet);
         }
 
         public void NewCreateBasicSwap(uint path, params string[] seed)
