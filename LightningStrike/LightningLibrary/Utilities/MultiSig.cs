@@ -37,7 +37,12 @@ namespace LightningLibrary.Utilities
             }
             return GetPublicKeyScript(minimumSignatures, pubKeys.ToArray());
         }
-
+        /// <summary>
+        /// Gets the P2SH address from an array of extended private keys of the claimants. 
+        /// </summary>
+        /// <param name="minimumSignatures">The minimum number of required signatures to send coins</param>
+        /// <param name="keys">the extended private keys</param>
+        /// <returns>A P2SH address</returns>
         public BitcoinScriptAddress GetP2SHAddress(int minimumSignatures, ExtKey[] keys)
         {
             List<Key> k = new List<Key>();
@@ -47,7 +52,28 @@ namespace LightningLibrary.Utilities
             }
             return GetP2SHAddress(minimumSignatures, k.ToArray());
         }
+
+        /// <summary>
+        /// Gets the P2SH address from the private keys of the claimants. 
+        /// </summary>
+        /// <param name="minimumSignatures">The minimum number of required signatures to send coins</param>
+        /// <param name="keys">the private keys</param>
+        /// <returns>A P2SH address</returns>
         public BitcoinScriptAddress GetP2SHAddress(int minimumSignatures, Key[] keys)
+        {
+            Script pubKeyScript = GetPublicKeyScript(minimumSignatures, keys);
+            var address = pubKeyScript.WitHash.GetAddress(_Network);
+            var p2sh = address.GetScriptAddress();
+            return p2sh;
+        }
+
+        /// <summary>
+        /// Gets the P2SH address from the Public keys of the claimants. 
+        /// </summary>
+        /// <param name="minimumSignatures">The minimum number of required signatures to send coins</param>
+        /// <param name="keys">the public keys</param>
+        /// <returns>A P2SH address</returns>
+        public BitcoinScriptAddress GetP2SHAddress(int minimumSignatures, PubKey[] keys)
         {
             Script pubKeyScript = GetPublicKeyScript(minimumSignatures, keys);
             var address = pubKeyScript.WitHash.GetAddress(_Network);
