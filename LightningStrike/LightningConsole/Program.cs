@@ -7,6 +7,9 @@ namespace LightningConsole
     class MainClass
     {
         static Dictionary<int, string> seeds;
+        /// <summary>
+        /// Create testnet testing
+        /// </summary>
         public static void Initialize()
         {
             seeds = new Dictionary<int, string>();
