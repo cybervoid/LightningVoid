@@ -51,14 +51,10 @@ namespace LightningLibrary.REST
             ExplorerResponse exResponse = new ExplorerResponse();
             try
             {
-
                 string resource = $"/api/tx/{txid}";
                 var request = new RestRequest(resource, Method.GET);
                 RestResponse response = (RestSharp.RestResponse)client.Execute(request);
-                //var content = response.Content; // raw content as string
-
-                exResponse.data = response.Content; // "[" + response.Content + "]";
-                //List<Objects.ExplorerUnspent> unspent = JsonConvert.DeserializeObject<List<ExplorerUnspent>>(content);
+                exResponse.data = response.Content;
             }
             catch (Exception ex)
             {

@@ -70,12 +70,8 @@
   <ItemGroup>
     <Compile Include="Utilities\Extensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Payments\Channel.cs" />
-    <Compile Include="Payments\Network.cs" />
-    <Compile Include="LightningGateways\LightningGatewayClient.cs" />
     <Compile Include="REST\RestLightning.cs" />
     <Compile Include="RPC\GRPCClient.cs" />
-    <Compile Include="RPC\RPCExtensions.cs" />
     <Compile Include="RPC\RPCLightningOperations.cs" />
     <Compile Include="Tests\LightningTests.cs" />
     <Compile Include="Wallets\HDWallet.cs" />
@@ -86,10 +82,8 @@
     <Compile Include="Atomic\Algorithmic\CoinType.cs" />
     <Compile Include="Atomic\Algorithmic\Interaction.cs" />
     <Compile Include="Atomic\Algorithmic\Party.cs" />
-    <Compile Include="Atomic\NBitcoin\SwapBuilder.cs" />
     <Compile Include="Utilities\Helpers.cs" />
     <Compile Include="Utilities\Segwit.cs" />
-    <Compile Include="REST\Insights.cs" />
     <Compile Include="REST\BlockExplorer.cs" />
     <Compile Include="Tests\ExplorerTests.cs" />
     <Compile Include="Objects\ExplorerUnspent.cs" />
@@ -102,19 +96,14 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
-    <None Include="Abstractions\placeholder.txt" />
     <None Include="rpc.proto">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Atomic\Algorithmic\Algorithm.txt" />
-    <None Include="Documentation\Resources.md" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Atomic\" />
-    <Folder Include="Atomic\Basic\" />
     <Folder Include="Atomic\Algorithmic\" />
-    <Folder Include="Atomic\NBitcoin\" />
-    <Folder Include="Documentation\" />
     <Folder Include="Objects\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

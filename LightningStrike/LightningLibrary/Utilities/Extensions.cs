@@ -17,17 +17,6 @@ namespace LightningLibrary.Utilities
             return (attributes.Any()) ? attributes.First().Description : value.ToString();
         }
 
-        //public static string ToJsonMethodName(this RpcMethod value)
-        //{
-        //    return GetEnumDescription(value);
-        //}
-
-
-        //public static string ToJsonMethodName(this BlockTag value)
-        //{
-        //    return GetEnumDescription(value);
-        //}
-
         public static bool IsUri(this string source)
         {
             if (!string.IsNullOrEmpty(source) && Uri.IsWellFormedUriString(source, UriKind.RelativeOrAbsolute))
@@ -38,13 +27,8 @@ namespace LightningLibrary.Utilities
             return (false);
         }
 
-        //public static T FromJson<T>(this object obj)
-        //{
-        //    return (T)JsonConvert.DeserializeObject<T>(obj);
-                    
-        //}
 
-        public static string ToJson(this object obj)
+        public static string AsJson(this object obj)
         {
             return JsonConvert.SerializeObject(obj);
         }

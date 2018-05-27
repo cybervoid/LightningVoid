@@ -23,13 +23,4 @@ namespace LightningLibrary.RPC
         }
     }
 
-    //public class RouteGuideClient
-    //{
-    //    readonly RouteGuide.RouteGuideClient client;
-
-    //    public RouteGuideClient(RouteGuide.RouteGuideClient client)
-    //    {
-    //        this.client = client;
-    //    }
-    //}
 }

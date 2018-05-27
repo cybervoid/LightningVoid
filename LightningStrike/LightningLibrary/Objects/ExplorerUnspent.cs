@@ -98,21 +98,5 @@ namespace LightningLibrary.Objects
                 return _Amount;
             }
         }
-
-        //public BitcoinScriptAddress GetBitcoinScriptAddress(Network network)
-        //{
-        //    return BitcoinScriptAddress.Create(sScriptPubKey, network);
-        //}
-
-        //public TxOut AsOutput()
-        //{
-            //return new TxOut(Amount, GetBitcoinScriptAddress(Network.TestNet));
-        //    return new TxOut(Amount, scriptPubKey.PaymentScript);
-        //}
-
-        //public TxIn AsInput()
-        //{
-        //    return new TxIn(scriptPubKey);
-        //}
     }
 }

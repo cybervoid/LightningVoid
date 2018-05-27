@@ -4,9 +4,12 @@ using System.Linq;
 using NBitcoin;
 namespace LightningLibrary.Utilities
 {
+
+
     /// <summary>
     /// A segwit functions manager
     /// </summary>
+    /// This pattern is not secure, do not use in production.
     /// <References>
     /// https://programmingblockchain.gitbooks.io/programmingblockchain/content/other_types_of_ownership/p2sh_pay_to_script_hash.html
     /// https://programmingblockchain.gitbooks.io/programmingblockchain/content/other_types_of_ownership/p2w_over_p2sh.html
