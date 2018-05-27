@@ -1,4 +1,4 @@
-#LightingVoid
+# LightingVoid
 Part of the *"Fill the Void"* effort. This repository has two purposes. Increase understanding of Bitcoin, and understand lightning network.
 
 - Upon researching Lightning, it became clear that I needed to understand concepts, such as segwit, better.  THerefore, this repository also exists as a playground to better understand various bitcoin concepts.
