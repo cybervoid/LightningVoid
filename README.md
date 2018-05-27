@@ -4,15 +4,15 @@ Part of the *"Fill the Void"* effort. This repository has two purposes. Increase
 - Upon researching Lightning, it became clear that I needed to understand concepts, such as segwit, better.  THerefore, this repository also exists as a playground to better understand various bitcoin concepts.
 
 
+##### This repository was part of my [Fill the Void](./#fill-the-void-repositories) effort to understand Blockchain technology at an expert level. 
+
 ## Lightning Network: Important Takeaways</h3>
 1. Lightning Resources</h3>
     - [Lightning Network BOLT Standards](https://github.com/lightningnetwork/lightning-rfc/blob/master/00-introduction.md) - The specifications and standards for the Lightning network.
     - [Lightning API Documentation](http://api.lightning.community/) - Documentation for Lightning network, include RPC calls
 
 
-##### This repository was part of my *"Fill the Void"* effort to understand Blockchain technology at an expert level.
-
-## "Fill the Void" Repositories
+## Fill the Void Repositories
 1. [RaidenVoid](https://github.com/cybervoid/RaidenVoid) - For learning all things Ethereum.
 2. [LightningVoid](https://github.com/cybervoid/LightningVoid) - For learning all things Bitcoin
 3. [VoidChain](https://github.com/cybervoid/VoidChain) - For learning general blockchain concepts
