@@ -3,8 +3,7 @@ Part of the *"Fill the Void"* effort. This repository has two purposes. Increase
 
 - Upon researching Lightning, it became clear that I needed to understand concepts, such as segwit, better.  THerefore, this repository also exists as a playground to better understand various bitcoin concepts.
 
-
-##### This repository was part of my [Fill the Void](./#fill-the-void-repositories) effort to understand Blockchain technology at an expert level. 
+##### This repository was part of my [Fill the Void](https://github.com/cybervoid/LightningVoid#fill-the-void-repositories) effort to understand Blockchain technology at an expert level.
 
 ## Lightning Network: Important Takeaways</h3>
 1. Lightning Resources</h3>
